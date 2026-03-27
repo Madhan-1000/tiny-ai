@@ -1,4 +1,4 @@
-# Tiny AI
+# Tiny RAG AI
 
 A lightweight Python library for embedding a chatbot into your web app with a simple function call.
 
