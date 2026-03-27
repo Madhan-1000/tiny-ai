@@ -1,10 +1,10 @@
+import os
 import faiss
 import pickle
-from huggingface_hub import hf_hub_download
-from sentence_transformers import SentenceTransformer
-from llama_cpp import Llama
 from pathlib import Path
 
+
+_cache_dir = os.environ.get("TINY_AI_CACHE_DIR", os.path.expanduser("~/.cache/tiny_ai"))
 _embed_model = None
 _llm = None
 _index = None
@@ -14,16 +14,22 @@ _save_path = None
 def set_save_path(path: str):
     global _save_path
     _save_path = path
+    
 
-def _load_models():
+def _load_models(cache_dir=_cache_dir):
     global _embed_model, _llm, _index, _chunks
     if _embed_model is None:
-        _embed_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-
+        from sentence_transformers import SentenceTransformer
+        _embed_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2" ,cache_dir=_cache_dir)
     if _llm is None:
+        
+        from huggingface_hub import hf_hub_download
+        from llama_cpp import Llama
+        
         model_path = hf_hub_download(
             repo_id="Qwen/Qwen2.5-0.5B-Instruct-GGUF",
             filename="qwen2.5-0.5b-instruct-q4_k_m.gguf",
+            cache_dir=_cache_dir
         )
         _llm = Llama(model_path=model_path, n_ctx=4096, n_threads=16)
 

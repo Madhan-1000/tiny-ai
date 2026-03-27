@@ -131,7 +131,7 @@ def save_index(index, chunks: list, save_path: str):
     """
     path = Path(save_path)
     
-    
+    path.mkdir(parents=True, exist_ok=True)
     faiss.write_index(index, str(path / "faiss.index"))
     
     
