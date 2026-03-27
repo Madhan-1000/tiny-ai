@@ -36,26 +36,26 @@ pip install tiny-rag-ai
 
 ## Quick Start
 ```python
-import tiny_ai
+import tiny_rag_ai
 
-tiny_ai.index("./docs")
+tiny_rag_ai.index("./docs")
 
-answer = tiny_ai.chat("What is your return policy?", use_case="customer support bot")
+answer = tiny_rag_ai.chat("What is your return policy?", use_case="customer support bot")
 print(answer)
 ```
 
 ## Usage in Flask
 ```python
 from flask import Flask, request, jsonify
-import tiny_ai
+import tiny_rag_ai
 
 app = Flask(__name__)
-tiny_ai.index("./docs")
+tiny_rag_ai.index("./docs")
 
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
-    answer = tiny_ai.chat(data.get("message"), use_case="customer support bot")
+    answer = tiny_rag_ai.chat(data.get("message"), use_case="customer support bot")
     return jsonify({"answer": answer})
 
 if __name__ == "__main__":
@@ -66,13 +66,13 @@ if __name__ == "__main__":
 ```python
 from fastapi import FastAPI
 from pydantic import BaseModel
-import tiny_ai
+import tiny_rag_ai
 
 app = FastAPI()
 
 @app.on_event("startup")
 def startup():
-    tiny_ai.index("./docs")
+    tiny_rag_ai.index("./docs")
 
 class ChatRequest(BaseModel):
     message: str
@@ -80,7 +80,7 @@ class ChatRequest(BaseModel):
 
 @app.post("/chat")
 def chat(req: ChatRequest):
-    answer = tiny_ai.chat(req.message, use_case=req.use_case)
+    answer = tiny_rag_ai.chat(req.message, use_case=req.use_case)
     return {"answer": answer}
 ```
 
@@ -93,21 +93,21 @@ class MyAppConfig(AppConfig):
     name = "myapp"
 
     def ready(self):
-        import tiny_ai
-        tiny_ai.index("./docs")
+        import tiny_rag_ai
+        tiny_rag_ai.index("./docs")
 ```
 ```python
 # views.py
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-import tiny_ai
+import tiny_rag_ai
 
 @csrf_exempt
 def chat(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        answer = tiny_ai.chat(data.get("message"), use_case="customer support bot")
+        answer = tiny_rag_ai.chat(data.get("message"), use_case="customer support bot")
         return JsonResponse({"answer": answer})
 ```
 ```python
@@ -124,7 +124,7 @@ urlpatterns = [
 
 Set this environment variable to persist models across deploys:
 ```
-TINY_AI_CACHE_DIR=/data/models
+tiny_rag_ai_CACHE_DIR=/data/models
 ```
 
 Mount a persistent disk at `/data` with minimum 1GB.
